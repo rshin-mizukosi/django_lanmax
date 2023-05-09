@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load tz %}
+
+{% load static %}
+
+{% block title %}Index{% endblock %}
+
+{% block conteudo %}
+    <div class="container mt-3" id="conteudo">
+        <p class="fs-4">Sistema criado com as seguintes funcionalidades:</p>
+
+        <ul>
+            <li>Atualiza Estoque e Preços Mercos/Lanmax</li>
+            <li>Atualiza status das GNRE de 'Guia Validada' para 'Pagamento Liberado'</li>
+            <li>Consulta Sintegra</li>
+        </ul>
+    </div>
+{% endblock %}

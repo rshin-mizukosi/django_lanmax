@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Sintegra{% endblock %}
+
+{% block conteudo %}
+    <div class="container mt-3">
+        <p>
+            <strong>CNPJ:</strong> {{ json_response.estabelecimento.cnpj_raiz }}{{ json_response.estabelecimento.cnpj_ordem }}{{ json_response.estabelecimento.cnpj_digito_verificador }}<br/>
+            <strong>Razão Social:</strong> {{ json_response.razao_social }}<br/>
+            <strong>Tipo Logradouro:</strong> {{ json_response.estabelecimento.tipo_logradouro }}<br/>
+            <strong>Logradouro:</strong> {{ json_response.estabelecimento.logradouro }}<br/>
+            <strong>Número:</strong> {{ json_response.estabelecimento.numero }}<br/>
+            <strong>Complemento:</strong> {{ json_response.estabelecimento.complemento }}<br/>
+            <strong>Bairro:</strong> {{ json_response.estabelecimento.bairro }}<br/>
+            <strong>CEP:</strong> {{ json_response.estabelecimento.cep }}<br/>
+            <strong>Município:</strong> {{ json_response.estabelecimento.cidade.nome }}<br/>
+            <strong>UF:</strong> {{ json_response.estabelecimento.estado.sigla }}<br/>
+            <strong>Situação Cadastral:</strong> {{ json_response.estabelecimento.situacao_cadastral }}<br/>
+            <strong>Situação Cadastral IE:</strong> {{ json_response.estabelecimento.motivo_situacao_cadastral }}<br/>
+
+        {% for r in json_response.estabelecimento.inscricoes_estaduais %}
+            {% if r.ativo %}
+                <strong>Inscrição Estadual:</strong> {{ r.inscricao_estadual }}
+            {% endif %}
+        {% endfor %}
+        </p>
+    </div>
+{% endblock %}

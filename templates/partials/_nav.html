@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-md bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'core_index' %}">Rotinas Lanmax</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" 
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-lg-0">
+                <li class="nav-item">
+                    {% url 'core_index' as url %}
+                    <a class="nav-link {% if request.path == url %}active{% endif %}" href="{% url 'core_index' %}">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    {% url 'sintegra_index' as url %}
+                    <a class="nav-link {% if url in request.path %}active{% endif %}" href="{% url 'sintegra_index' %}">Sintegra</a>
+                </li>
+
+                <li class="nav-item">
+                    {% url 'mercos_index' as url %}
+                    <a class="nav-link {% if request.path == url %}active{% endif %}" href="{% url 'mercos_index' %}">Mercos</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    {% url 'gnre_index' db as url %}
+                    <a class="nav-link dropdown-toggle {% if url == request.path %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        GNRE
+                    </a>
+                    
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'gnre_index' 'greenmotor' %}">GreenMotor</a></li>
+                        <li><a class="dropdown-item" href="{% url 'gnre_index' 'lanmax' %}">Lanmax</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

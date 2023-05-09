@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Mercos{% endblock %}
+
+{% block conteudo %}
+    <div id="overlay">
+        <div class="cv-spinner">
+            <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container mt-3">
+        {% include 'partials/_messages.html' %}
+        <div class="d-flex justify-content-center">
+            <form method="POST" action="{% url 'mercos_atualiza_produtos_lanmax' %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="data" class="form-label">Data</label>
+                        <input type="text" class="form-control" id="id_data" name="data" style="text-align: center;" value="{{ ultima_data }}" required minlength="10">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="hora" class="form-label">Hora</label>
+                        <input type="text" class="form-control" id="id_hora" name="hora" style="text-align: center;" value="{{ ultima_hora }}" required minlength="5">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary" id="btnAtProdLanmax">Atualizar Produtos Lanmax</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <script type="text/javascript">
+        var url_atualiza_lanmax = "{% url 'mercos_atualiza_produtos_lanmax' %}"
+    </script>
+    
+    <script src="{% static 'js/produtos-lanmax.js' %}"></script>
+{% endblock %}

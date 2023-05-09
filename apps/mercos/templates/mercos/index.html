@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load tz %}
+
+{% load static %}
+
+{% block title %}Mercos{% endblock %}
+
+{% block conteudo %}
+    <div id="overlay">
+        <div class="cv-spinner">
+            <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div class="d-flex justify-content-end mt-3">
+            <span class="fw-bold">
+                Total de registros: {{ result|length }}
+            </span>
+        </div>
+        
+        <table class="table table-sm table-hover">
+            <thead class="table-warning">
+                <tr>
+                    <th scope="col">CodProd</th>
+                    <th scope="col">Preco_MP</th>
+                    <th scope="col">Preco_P</th>
+                    <th scope="col">Estoque_MP</th>
+                    <th scope="col">Estoque_P</th>
+                    <th scope="col">ID_MP</th>
+                    <th scope="col">Última Alt.</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in result %}
+                <tr>
+                    {% for key, value in r.items %}
+                        {% if key == 'ultima_alt' %}
+                            {% timezone "UTC" %}
+                            <td>{{ value|date:"d/m/Y H:i:s" }}</td>
+                            {% endtimezone %}
+                        {% else %}
+                            <td>{{ value }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td>
+                        <span class="badge rounded-pill bg-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                            </svg>
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        var url_atualiza_mercos = "{% url 'mercos_atualiza_produtos_mercos' %}";
+        var url_atualiza_lanmax = "{% url 'mercos_atualiza_produtos_lanmax' %}";
+    </script>
+
+    <script src="{% static 'js/mercos.js' %}"></script>
+{% endblock %}

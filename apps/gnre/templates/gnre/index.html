@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load tz %}
+
+{% load static %}
+
+{% block title %}GNRE {{ db|capfirst }}{% endblock %}
+
+{% block conteudo %}
+    <div class="container mt-3">
+        <div class="d-flex justify-content-end mt-3">
+            <span class="fw-bold">
+                GNRE Não Liberadas: {{ result|length }}
+            </span>
+        </div>
+        
+        <table class="table table-sm table-hover">
+            <thead class="table-warning">
+                <tr>
+                    <th scope="col">Pedido</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">NFe</th>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">UF</th>
+                    <th scope="col">Data Emissão</th>
+                    <th scope="col">Data Validação</th>
+                    <th scope="col">Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in result %}
+                <tr>
+                    {% for key, value in r.items %}
+                        {% if key == 'data_emissao' or key == 'data_validacao' %}
+                            {% timezone "UTC" %}
+                            <td>{{ value|date:"d/m/Y H:i:s" }}</td>
+                            {% endtimezone %}
+                        {% else %}
+                            <td>{{ value }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        var url_libera_pagto = "{% url 'gnre_libera_pagto' db %}";
+        var csrf_token = '{{ csrf_token }}';
+    </script>
+
+    <script src="{% static 'js/gnre.js' %}"></script>
+{% endblock %}
