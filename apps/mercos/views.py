@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from datetime import datetime
 import requests, json, time
 
-# Create your views here.
 def json_produto(produto, excluir):
     query = "SELECT ID_MeusPedidos FROM Lanmax.dbo.Categorias WHERE CodCateg = %s"
 
@@ -54,11 +54,12 @@ def get_produto(id):
         "FROM Lanmax.dbo.MeusPedidos_Produtos WHERE ID_MeusPedidos is not null AND CodProd = %s", (str(id), ))
     
     produto = cursor.fetchone()
-
+    
     keys = ('cod_prod', 'nome_prod', 'descricao', 'cod_categ', 'peso', 'preco', 'estoque', 'id_meus_pedidos', 'ultima_alt')
 
     return dict(zip(keys, produto))
 
+@login_required
 def index(request):
     cursor = connection.cursor()
     cursor.execute("SELECT mp.CodProd,mp.Preco,p.PrecoRef,mp.Estoque,p.Estoque,mp.ID_MeusPedidos,mp.UltimaAlt_MeusPedidos " \
@@ -76,13 +77,14 @@ def index(request):
 
     return render(request, 'mercos/index.html', {'result': result})
 
+@login_required
 def atualiza_produtos_mercos(request):
     headers = {
         "Content-Type": "application/json; charset=utf-8",
         "ApplicationToken": "b8ce5704-3629-11e9-b016-02ebd944bdac",
         "CompanyToken": "702357d6-1d78-11e8-86ae-02bb1d423b88"
     }
-
+    
     produto = get_produto(request.GET.get('codigo'))
 
     url = "https://app.mercos.com/api/v1/produtos/" + str(produto.get('id_meus_pedidos'))
@@ -102,9 +104,11 @@ def atualiza_produtos_mercos(request):
 
     return HttpResponse(json_response, content_type='application/json')
 
+@login_required
 def produtos_lanmax(request):
     return render(request, 'mercos/produtos-lanmax.html')
 
+@login_required
 def atualiza_produtos_lanmax(request):
     if request.method == 'POST':
         data = datetime.strptime(request.POST.get('data'), '%d/%m/%Y')

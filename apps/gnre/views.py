@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.db import connection
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 import json
 
-# Create your views here.
+@login_required
 def index(request, db='lanmax'):
     cursor = connection.cursor()
     cursor.execute("SELECT CodPedido, Tipo, NFe, Empresa, UF, DataEmissao,DataValidacao, Valor FROM " + db.capitalize() + ".dbo.GNRE_Pagamentos WHERE Status = 2 ORDER BY DataValidacao")
@@ -17,6 +18,7 @@ def index(request, db='lanmax'):
 
     return render(request, 'gnre/index.html', {'result': result, 'db': db})
 
+@login_required
 def libera_pagto(request, db='lanmax'):
     if request.method == 'POST':
         cursor = connection.cursor()

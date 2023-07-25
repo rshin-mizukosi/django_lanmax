@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from itertools import cycle
 import requests, json
 
@@ -21,9 +22,11 @@ def is_cnpj_valido(cnpj: str) -> bool:
 
     return True
 
+@login_required
 def index(request):
     return render(request, 'sintegra/index.html')
 
+@login_required
 def consulta(request):
     if request.method == 'POST':
         if is_cnpj_valido(request.POST.get('cnpj')):
