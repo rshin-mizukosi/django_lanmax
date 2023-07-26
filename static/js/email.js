@@ -17,10 +17,10 @@ $(function() {
                         $('#log').append("<li class='text-danger'>" + v.msg + "</li>")
                     }
                 })
-
-                $('#overlay').fadeOut()
             },
             complete: function() {
+                $('#overlay').fadeOut()
+                
                 setTimeout(function() {
                     send_email()
                 }, 300000)
