@@ -1,5 +1,7 @@
 $(function() {
     function send_email() {
+        $('#overlay').fadeIn()
+
         $.ajax({
             method: 'POST',
             url: url_email,
@@ -15,6 +17,8 @@ $(function() {
                         $('#log').append("<li class='text-danger'>" + v.msg + "</li>")
                     }
                 })
+
+                $('#overlay').fadeOut()
             },
             complete: function() {
                 setTimeout(function() {
@@ -25,6 +29,8 @@ $(function() {
     }
 
     function gera_email_gnre() {
+        $('#overlay').fadeIn()
+
         $.ajax({
             method: 'POST',
             url: url_gnre_email,
@@ -40,6 +46,8 @@ $(function() {
                         $('#log').append("<li class='text-danger'>" + v.msg + "</li>")
                     }
                 })
+
+                $('#overlay').fadeOut()
             },
             complete: function() {
                 setTimeout(function() {
