@@ -15,6 +15,18 @@
                     <a class="nav-link {% if request.path == url %}active{% endif %}" href="{% url 'core_index' %}">Home</a>
                 </li>
 
+                <li class="nav-item dropdown">
+                    {% url 'email_lanmax_index' db as url %}
+                    <a class="nav-link dropdown-toggle {% if url == request.path %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        E-mail
+                    </a>
+                    
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'email_lanmax_index' 'greenmotor' %}">GreenMotor</a></li>
+                        <li><a class="dropdown-item" href="{% url 'email_lanmax_index' 'lanmax' %}">Lanmax</a></li>
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     {% url 'sintegra_index' as url %}
                     <a class="nav-link {% if url in request.path %}active{% endif %}" href="{% url 'sintegra_index' %}">Sintegra</a>

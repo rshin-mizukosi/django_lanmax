@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'apps.mercos',
     'apps.gnre',
     'apps.sintegra',
+    'apps.email_lanmax',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,25 @@ DATABASES = {
         'NAME': 'Lanmax',
         'USER': 'Renan',
         'PASSWORD': "testando*123",
-        'HOST': 'srv-dbx\sqllanmax',
+        'HOST': '189.86.44.34,1433\sqllanmax',
+        'PORT': '1433',
+        'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
+    },
+    'lanmax': {
+        'ENGINE': 'mssql',
+        'NAME': 'Lanmax',
+        'USER': 'Renan',
+        'PASSWORD': "testando*123",
+        'HOST': '189.86.44.34,1433\sqllanmax',
+        'PORT': '1433',
+        'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
+    },
+    'greenmotor': {
+        'ENGINE': 'mssql',
+        'NAME': 'GreenMotor',
+        'USER': 'Renan',
+        'PASSWORD': "testando*123",
+        'HOST': '189.86.44.34,1433\sqllanmax',
         'PORT': '1433',
         'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
     }
@@ -142,8 +161,15 @@ MESSAGE_TAGS = {
     constants.SUCCESS: 'alert-success',
 }
 
-SESSION_COOKIE_AGE = 300
-SESSION_SAVE_EVERY_REQUEST = True
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_AGE = 300
+# SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGIN_URL = '/accounts/login/'
+
+SMTP_SERVER = "smtp.office365.com"
+SMTP_PORT = "587"
+FROM_EMAIL_GREENMOTOR = "comunicacao@reachcooling.com.br"
+FROM_EMAIL_LANMAX = "comunicacao@lanmax.com.br"
+EMAIL_PASSWORD_GREENMOTOR = "4Fr1C4*2022"
+EMAIL_PASSWORD_LANMAX = "M3$tr3*2021"
