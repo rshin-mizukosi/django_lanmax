@@ -93,7 +93,7 @@ def criar_email_gnre(db, gnre):
 
         cursor.execute("SELECT Constante FROM aux_Constantes WHERE Tipo = 'GNRE'")
         diretorio_comprovante = namedtuplefetchall(cursor)
-        
+
         anexos.append(diretorio_comprovante[0].Constante + gnre.Mnemonico_GNRE + '\\' + gnre.Comprovante)
 
         cursor.execute("SELECT Diretorio FROM DiretoriosNFe WHERE CNPJ = %s AND TipoArquivo = 'pdfDANFe'", (gnre.emit_CNPJ,))

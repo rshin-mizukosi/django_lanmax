@@ -50,7 +50,7 @@ def json_produto(produto, excluir):
 
 def get_produto(id):
     cursor = connection.cursor()
-    cursor.execute("SELECT CodProd,NomeProd,Descricao,CodCateg,Peso,Preco,Estoque,ID_MeusPedidos,UltimaAlt_MeusPedidos " \
+    cursor.execute("SELECT CodProd,NomeProd,Descricao,CodCateg,Peso,CASE WHEN CodProd = -41343 THEN 89.9 ELSE ROUND(Preco+(Preco*0.031), 2) END AS Preco,Estoque,ID_MeusPedidos,UltimaAlt_MeusPedidos " \
         "FROM Lanmax.dbo.MeusPedidos_Produtos WHERE ID_MeusPedidos is not null AND CodProd = %s", (str(id), ))
     
     produto = cursor.fetchone()
@@ -62,9 +62,10 @@ def get_produto(id):
 @login_required
 def index(request):
     cursor = connection.cursor()
-    cursor.execute("SELECT mp.CodProd,mp.Preco,p.PrecoRef,mp.Estoque,p.Estoque,mp.ID_MeusPedidos,mp.UltimaAlt_MeusPedidos " \
+    cursor.execute("SELECT mp.CodProd,CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031), 2) END AS Preco,p.PrecoRef,mp.Estoque,p.Estoque,mp.ID_MeusPedidos,mp.UltimaAlt_MeusPedidos " \
         "FROM Lanmax.dbo.MeusPedidos_Produtos mp INNER JOIN Lanmax.dbo.ProdutosTeste p ON mp.CodProd = p.CodProd " \
-        "WHERE (mp.Estoque <> p.Estoque OR mp.Preco <> p.PrecoRef) AND mp.ID_MeusPedidos is not null " \
+        "WHERE (mp.Estoque <> p.Estoque OR CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031), 2) END <> p.PrecoRef) AND mp.ID_MeusPedidos is not null " \
+        #"WHERE (mp.Estoque <> p.Estoque OR CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031), 2) END <> p.PrecoRef) AND mp.CodProd = -41343 " \
         "ORDER BY mp.CodProd")
     
     rows = cursor.fetchall()
