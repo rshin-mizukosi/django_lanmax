@@ -79,7 +79,7 @@ DATABASES = {
         'NAME': 'Lanmax',
         'USER': 'Renan',
         'PASSWORD': "testando*123",
-        'HOST': 'srv-dbx\sqllanmax',
+        'HOST': 'landbx01\sqllanmax',
         'PORT': '1433',
         'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
     },
