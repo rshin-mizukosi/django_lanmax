@@ -8,5 +8,5 @@ urlpatterns = [
     path('mercos/', include('apps.mercos.urls')),
     path('gnre/<str:db>/', include('apps.gnre.urls')),
     path('sintegra/', include('apps.sintegra.urls')),
-    path('email/<str:db>/', include('apps.email_lanmax.urls')),
+    path('monitoramento-nfe/', include('apps.monitoramento_nfe.urls')),
 ]

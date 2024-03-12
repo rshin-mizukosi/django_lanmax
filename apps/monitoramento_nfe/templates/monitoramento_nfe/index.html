@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Monitoramento NF-e{% endblock %}
+
+{% block conteudo %}
+    <div class="container">
+        {% include 'partials/_messages.html' %}
+    </div>
+    <div class="container-fluid mt-3">
+        <label id="refresh_time" style="color: red; font-weight: bold;" class="mb-2 ms-2"></label>
+        <table class="table table-hover">
+            <thead class="table-warning">
+                <tr>
+                    <th scope="col">Empresa</th>
+                    <th scope="col">Pedido</th>
+                    <th scope="col">NF-e</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Data Emissão</th>
+                    <th scope="col">Tempo</th>
+                    <th scope="col">Retorno</th>
+                </tr>
+            </thead>
+            <tbody id="lista"></tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var url = "{% url 'monitoramento_nfe_api_nfe_erro' %}"
+    </script>
+    <script src="/static/js/monitoramento-nfe.js"></script>
+{% endblock scripts %}

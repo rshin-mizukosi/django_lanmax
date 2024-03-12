@@ -16,8 +16,9 @@ SECRET_KEY = 'django-insecure-yl5+vvlo3*et(7z*bp-4su39+nlk)=n%qd3_huzbjvy@=_ofgz
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '192.168.10.42',
+    #'localhost',
+    #'192.168.10.42',
+    '*',
 ]
 
 
@@ -35,7 +36,7 @@ INSTALLED_APPS = [
     'apps.mercos',
     'apps.gnre',
     'apps.sintegra',
-    'apps.email_lanmax',
+    'apps.monitoramento_nfe',
 ]
 
 MIDDLEWARE = [
@@ -83,12 +84,21 @@ DATABASES = {
         'PORT': '1433',
         'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
     },
+    'base_nfe': {
+        'ENGINE': 'mssql',
+        'NAME': 'Base_NFE',
+        'USER': 'sa',
+        'PASSWORD': "Y4k1s0b4!11",
+        'HOST': 'landbx01\sqllanmax',
+        'PORT': '1433',
+        'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
+    },
     'lanmax': {
         'ENGINE': 'mssql',
         'NAME': 'Lanmax',
         'USER': 'Renan',
         'PASSWORD': "testando*123",
-        'HOST': 'srv-dbx\sqllanmax',
+        'HOST': 'landbx01\sqllanmax',
         'PORT': '1433',
         'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
     },
@@ -97,7 +107,7 @@ DATABASES = {
         'NAME': 'GreenMotor',
         'USER': 'Renan',
         'PASSWORD': "testando*123",
-        'HOST': 'srv-dbx\sqllanmax',
+        'HOST': 'landbx01\sqllanmax',
         'PORT': '1433',
         'OPTIONS': {'driver': 'ODBC Driver 17 for SQL Server',},
     }

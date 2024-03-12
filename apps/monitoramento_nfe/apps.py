@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class EmailLanmaxConfig(AppConfig):
+class MonitoramentoNfeConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.email_lanmax'
+    name = 'apps.monitoramento_nfe'
