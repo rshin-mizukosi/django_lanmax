@@ -1,10 +1,97 @@
 $(function() {
-    var myTimeout = setTimeout(function() {
-        location.reload();
-    }, 60000);
+    var segundos = 60;
+    var contagem_regressiva = segundos;
 
-    if($('table > tbody > tr').length >= 100) {
-        clearInterval(myTimeout);
+    var refreshInterval = setInterval(function() {
+        contagemRegressiva();
+    }, 1000);
+
+    trazerRegistros();
+
+    function contagemRegressiva() {
+        if(contagem_regressiva == 0) {
+            contagem_regressiva = segundos;
+            trazerRegistros();
+        }
+    
+        if(contagem_regressiva < 10)
+            document.getElementById("refresh_time").textContent = 'Atualizando em 0' + contagem_regressiva + 'seg...';
+        else
+            document.getElementById("refresh_time").textContent = 'Atualizando em ' + contagem_regressiva + 'seg...';
+    
+        contagem_regressiva = contagem_regressiva - 1;
+    }
+
+    function trazerRegistros() {
+        let i = 0;
+
+        limpar_lista_registros();
+    
+        fetch(url)
+        .then(res => {return res.json();})
+        .then(data => {
+            data.forEach(el => {
+                tr = document.createElement('tr');
+                tr.setAttribute('id', el.cod_prod);
+                lista.appendChild(tr);
+
+                td1 = document.createElement('td');
+                td1.textContent = el.cod_prod;
+                tr.appendChild(td1);
+    
+                td2 = document.createElement('td');
+                td2.textContent = el.preco_mp;
+                tr.appendChild(td2);
+    
+                td3 = document.createElement('td');
+                td3.textContent = el.preco_p;
+                tr.appendChild(td3);
+    
+                td4 = document.createElement('td');
+                td4.textContent = el.estoque_mp;
+                tr.appendChild(td4);
+    
+                td5 = document.createElement('td');
+                td5.textContent = el.estoque_p;
+                tr.appendChild(td5);
+    
+                td6 = document.createElement('td');
+                td6.textContent = el.id_meus_pedidos;
+                tr.appendChild(td6);
+    
+                td7 = document.createElement('td');
+                td7.textContent = el.ultima_alt;
+                tr.appendChild(td7);
+    
+                td8 = document.createElement('td');
+                span = document.createElement('span');
+                span.className = 'badge rounded-pill bg-danger';
+
+                i1 = document.createElement('i');
+                i1.className = 'fa-solid fa-x';
+
+                tr.appendChild(td8);
+                td8.appendChild(span);
+                span.appendChild(i1);
+
+                i++;
+            });
+
+            $('#total-registros').text('Total de registros: ' + i);
+
+            if(i >= 100)
+                atualizaEstoquePrecoLanmax();
+        })
+    }
+    
+    function limpar_lista_registros() {
+        // remove filhos previos
+        while(lista.firstChild)
+            lista.removeChild(lista.firstChild);
+    }
+
+    function atualizaEstoquePrecoLanmax() {
+        clearInterval(refreshInterval);
         $('#overlay').fadeIn();
         var totalRows = $('table > tbody > tr').length;
         var countRows = 0;
@@ -65,15 +152,9 @@ $(function() {
 
     function buildBadgeStatus(tr, status) {
         if(status == 200) {
-            var html_badge = "<td><span class='badge rounded-pill bg-success'>" +
-                "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-check-lg' viewBox='0 0 16 16'>" +
-                "<path d='M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z'/>" +
-                "</svg></span></td>"
+            var html_badge = "<td><span class='badge rounded-pill bg-success'><i class='fa-solid fa-check'></i></span></td>"
         } else {
-            var html_badge = "<td><span class='badge rounded-pill bg-danger'>" +
-                "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-x-lg' viewBox='0 0 16 16'>" +
-                "<path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z'/>" +
-                "</svg></span></td>"
+            var html_badge = "<td><span class='badge rounded-pill bg-danger'><i class='fa-solid fa-x'></i></span></td>"
         }
         
         $(tr).append(html_badge)

@@ -15,10 +15,11 @@
     </div>
 
     <div class="container mt-3">
-        <div class="d-flex justify-content-end mt-3">
-            <span class="fw-bold">
-                Total de registros: {{ result|length }}
-            </span>
+        <div class="d-flex">
+            <div class="me-auto">
+                <label id="refresh_time" style="color: red; font-weight: bold;" class="mb-2 ms-2"></label>
+            </div>
+            <div class="fw-bold" id="total-registros"></div>
         </div>
         
         <table class="table table-sm table-hover">
@@ -34,7 +35,8 @@
                     <th scope="col">Status</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="lista">
+                {% comment %}
                 {% for r in result %}
                 <tr>
                     {% for key, value in r.items %}
@@ -55,6 +57,7 @@
                     </td>
                 </tr>
                 {% endfor %}
+                {% endcomment %}
             </tbody>
         </table>
     </div>
@@ -64,6 +67,7 @@
     <script type="text/javascript">
         var url_atualiza_mercos = "{% url 'mercos_atualiza_produtos_mercos' %}";
         var url_atualiza_lanmax = "{% url 'mercos_atualiza_produtos_lanmax' %}";
+        var url = "{% url 'mercos_api_produtos_divergentes' %}";
     </script>
 
     <script src="{% static 'js/mercos.js' %}"></script>

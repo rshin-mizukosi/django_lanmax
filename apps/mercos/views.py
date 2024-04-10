@@ -3,6 +3,8 @@ from django.db import connection
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.utils import InterfaceError
+from django.http import JsonResponse
 from datetime import datetime
 import requests, json, time
 
@@ -61,22 +63,7 @@ def get_produto(id):
 
 @login_required
 def index(request):
-    cursor = connection.cursor()
-    cursor.execute("SELECT mp.CodProd,CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031)+(mp.Preco*0.051), 2) END AS Preco,p.PrecoRef,mp.Estoque,p.Estoque,mp.ID_MeusPedidos,mp.UltimaAlt_MeusPedidos " \
-        "FROM Lanmax.dbo.MeusPedidos_Produtos mp INNER JOIN Lanmax.dbo.ProdutosTeste p ON mp.CodProd = p.CodProd " \
-        "WHERE (mp.Estoque <> p.Estoque OR CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031)+(mp.Preco*0.051), 2) END <> p.PrecoRef) AND mp.ID_MeusPedidos is not null " \
-        #"WHERE (mp.Estoque <> p.Estoque OR CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031)+(mp.Preco*0.051), 2) END <> p.PrecoRef) AND mp.CodProd >= -41315 " \
-        "ORDER BY mp.CodProd")
-    
-    rows = cursor.fetchall()
-
-    result = []
-    keys = ('cod_prod', 'preco_mp', 'preco_p', 'estoque_mp', 'estoque_p', 'id_meus_pedidos', 'ultima_alt')
-
-    for row in rows:
-        result.append(dict(zip(keys, row)))
-
-    return render(request, 'mercos/index.html', {'result': result})
+    return render(request, 'mercos/index.html')
 
 @login_required
 def atualiza_produtos_mercos(request):
@@ -176,3 +163,25 @@ def atualiza_produtos_lanmax(request):
     else:
         #return redirect('mercos_produtos_lanmax')
         return render(request, 'mercos/produtos-lanmax.html', {'ultima_data': request.GET.get('data'), 'ultima_hora': request.GET.get('hora')})
+    
+def produtos_divergentes(request):
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT mp.CodProd,CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031)+(mp.Preco*0.051), 2) END AS Preco,p.PrecoRef,mp.Estoque,p.Estoque,mp.ID_MeusPedidos,FORMAT(mp.UltimaAlt_MeusPedidos, 'dd/MM/yyyy HH:mm:ss ') UltimaAlt_MeusPedidos " \
+            "FROM Lanmax.dbo.MeusPedidos_Produtos mp INNER JOIN Lanmax.dbo.ProdutosTeste p ON mp.CodProd = p.CodProd " \
+            "WHERE (mp.Estoque <> p.Estoque OR CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031)+(mp.Preco*0.051), 2) END <> p.PrecoRef) AND mp.ID_MeusPedidos is not null " \
+            #"WHERE (mp.Estoque <> p.Estoque OR CASE WHEN mp.CodProd = -41343 THEN 89.9 ELSE ROUND(mp.Preco+(mp.Preco*0.031)+(mp.Preco*0.051), 2) END <> p.PrecoRef) AND mp.CodProd >= -41315 " \
+            "ORDER BY mp.CodProd")
+        
+        rows = cursor.fetchall()
+
+        data = []
+        keys = ('cod_prod', 'preco_mp', 'preco_p', 'estoque_mp', 'estoque_p', 'id_meus_pedidos', 'ultima_alt')
+
+        for row in rows:
+            data.append(dict(zip(keys, row)))
+    except InterfaceError:
+        print('Erro de comunicacao com o banco de dados')
+        return JsonResponse({}, safe=False)
+    else:
+        return JsonResponse(list(data), safe=False)

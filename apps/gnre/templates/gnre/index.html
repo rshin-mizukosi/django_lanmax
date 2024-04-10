@@ -7,10 +7,15 @@
 
 {% block conteudo %}
     <div class="container mt-3">
-        <div class="d-flex justify-content-end mt-3">
-            <span class="fw-bold">
-                GNRE Não Liberadas: {{ result|length }}
-            </span>
+        <div class="d-flex">
+            <div class="me-auto">
+                <label id="refresh_time" style="color: red; font-weight: bold;" class="mb-2 ms-2"></label>
+            </div>
+            <div>
+                <span class="fw-bold">
+                    GNRE Não Liberadas: {{ result|length }}
+                </span>
+            </div>
         </div>
         
         <table class="table table-sm table-hover">
@@ -26,21 +31,7 @@
                     <th scope="col">Valor</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for r in result %}
-                <tr>
-                    {% for key, value in r.items %}
-                        {% if key == 'data_emissao' or key == 'data_validacao' %}
-                            {% timezone "UTC" %}
-                            <td>{{ value|date:"d/m/Y H:i:s" }}</td>
-                            {% endtimezone %}
-                        {% else %}
-                            <td>{{ value }}</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
+            <tbody id="lista"></tbody>
         </table>
     </div>
 {% endblock %}
@@ -48,6 +39,7 @@
 {% block scripts %}
     <script type="text/javascript">
         var url_libera_pagto = "{% url 'gnre_libera_pagto' db %}";
+        var url = "{% url 'gnre_api_gnre_nao_liberadas' db %}"
         var csrf_token = '{{ csrf_token }}';
     </script>
 
